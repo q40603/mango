@@ -38,12 +38,21 @@ import com.serotonin.mango.vo.permission.DataPointAccess;
 import com.serotonin.web.taglib.Functions;
 
 public class UserDao extends BaseDao {
+	private Cache cache;
+	public UserDao() {
+		this.cache=Cache(100);
+	}
     private static final String USER_SELECT = "select id, username, password, email, phone, admin, disabled, selectedWatchList, homeUrl, lastLogin, "
             + "  receiveAlarmEmails, receiveOwnAuditEvents " + "from users ";
-
+    
     public User getUser(int id) {
-        User user = queryForObject(USER_SELECT + "where id=?", new Object[] { id }, new UserRowMapper(), null);
-        populateUserPermissions(user);
+    	User user;
+    	user=this.cache.get(id);
+    	if (user!=null) {
+	        user = queryForObject(USER_SELECT + "where id=?", new Object[] { id }, new UserRowMapper(), null);
+	        populateUserPermissions(user);
+	        this.cache.put(id,user);
+    	}
         return user;
     }
 
@@ -98,7 +107,7 @@ public class UserDao extends BaseDao {
     public void populateUserPermissions(User user) {
         if (user == null)
             return;
-
+        
         user.setDataSourcePermissions(queryForList(SELECT_DATA_SOURCE_PERMISSIONS, new Object[] { user.getId() },
                 Integer.class));
         user.setDataPointPermissions(query(SELECT_DATA_POINT_PERMISSIONS, new Object[] { user.getId() },
@@ -138,6 +147,7 @@ public class UserDao extends BaseDao {
                         Types.VARCHAR, Types.INTEGER, Types.VARCHAR });
         user.setId(id);
         saveRelationalData(user);
+        this.cache.put(id,user);
     }
 
     private static final String USER_UPDATE = "update users set "
@@ -200,6 +210,7 @@ public class UserDao extends BaseDao {
                 ejt.update("delete from users where id=?", args);
             }
         });
+        this.cache.delete(userId);
     }
 
     public void recordLogin(int userId) {
