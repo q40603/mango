@@ -2,5 +2,5 @@
 
 
 ## diff
-war/WEB-INF/jsp/reports.jsp
-src/com/serotonin/mango/web/dwr/ReportsDwr.java
+* war/WEB-INF/jsp/reports.jsp
+* src/com/serotonin/mango/web/dwr/ReportsDwr.java
