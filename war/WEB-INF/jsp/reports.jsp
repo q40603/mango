@@ -33,9 +33,9 @@
             hide("hourglass");
             allPointsArray = response.data.points;
             
-            // emailRecipients = new mango.erecip.EmailRecipients("recipients",
-            //         "<fmt:message key="reports.recipTestEmailMessage"/>", response.data.mailingLists, response.data.users);
-            // emailRecipients.write("emailRecipBody", "emailRecipients", null, "<fmt:message key="reports.emailRecipients"/>");
+            emailRecipients = new mango.erecip.EmailRecipients("recipients",
+                    "<fmt:message key="reports.recipTestEmailMessage"/>", response.data.mailingLists, response.data.users);
+            emailRecipients.write("emailRecipBody", "emailRecipients", null, "<fmt:message key="reports.emailRecipients"/>");
             
             updateReportInstancesList(response.data.instances);
             
@@ -48,17 +48,10 @@
               ReportsDwr.createReportFromWatchlist(${param.wlid}, loadReportCB);
             </c:if>
         });
-        const myTimeout = setTimeout(setemailRecipients, 2000);
+
     }
 
-    function setemailRecipients(){
-      ReportsDwr.getemailRecipients(function(response) {
-        emailRecipients = new mango.erecip.EmailRecipients("recipients",
-                    "<fmt:message key="reports.recipTestEmailMessage"/>", response.data.mailingLists, response.data.users);
-        emailRecipients.write("emailRecipBody", "emailRecipients", null, "<fmt:message key="reports.emailRecipients"/>");
 
-      });
-    }
 
 
     

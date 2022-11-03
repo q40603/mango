@@ -54,22 +54,15 @@ public class ReportsDwr extends BaseDwr {
         User user = Common.getUser();
 
         response.addData("points", getReadablePoints());
-        // response.addData("mailingLists", new MailingListDao().getMailingLists());
-        // response.addData("users", new UserDao().getUsers());
+        response.addData("mailingLists", new MailingListDao().getMailingLists());
+        response.addData("users", new UserDao().getUsers());
         response.addData("reports", reportDao.getReports(user.getId()));
         response.addData("instances", getReportInstances(user));
 
         return response;
     }
 
-    public DwrResponseI18n getemailRecipients(){
-        DwrResponseI18n response = new DwrResponseI18n();
-        User user = Common.getUser();
-        response.addData("mailingLists", new MailingListDao().getMailingLists());
-        response.addData("users", new UserDao().getUsers());
 
-        return response;
-    }
 
 
 
